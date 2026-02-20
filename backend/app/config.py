@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     chat_model: str = "llama3.2:3b"
 
     # ChromaDB
-    chroma_persist_dir: str = "/data/chroma"
+    chroma_persist_dir: str = "/app/chroma_data"
     chroma_collection_name: str = "itsm_docs"
 
     # Chunking
