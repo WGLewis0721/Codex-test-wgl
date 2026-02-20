@@ -1,13 +1,13 @@
 """Base Pydantic models and shared schemas."""
 from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 from pydantic import BaseModel, Field
 
 
 class HealthResponse(BaseModel):
     status: str = "ok"
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     details: dict[str, Any] = Field(default_factory=dict)
 
 

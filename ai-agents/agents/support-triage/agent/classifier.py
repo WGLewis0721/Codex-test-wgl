@@ -3,7 +3,8 @@ from __future__ import annotations
 import json
 import re
 from typing import Any
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../.."))
 from shared.ollama import chat
 from shared.logging import get_logger

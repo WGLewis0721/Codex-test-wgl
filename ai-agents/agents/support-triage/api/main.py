@@ -3,7 +3,8 @@ from __future__ import annotations
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from datetime import datetime
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../.."))
 from shared.schemas import HealthResponse, PaginatedResponse
 from shared.opensearch import query_recent, summarize_events

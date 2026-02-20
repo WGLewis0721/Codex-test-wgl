@@ -1,8 +1,9 @@
 """SQLite schema and queries for Support Triage."""
 from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../.."))
 from shared.storage import get_db_path, execute, paginate, fetchall
 
@@ -40,7 +41,7 @@ def save_analysis(
     execute(
         db_path,
         "INSERT INTO analyses (ticket_text, urgency, sentiment, domain, routing, draft_response, created_at) VALUES (?,?,?,?,?,?,?)",
-        (ticket_text, urgency, sentiment, domain, routing, draft_response, datetime.utcnow().isoformat()),
+        (ticket_text, urgency, sentiment, domain, routing, draft_response, datetime.now(timezone.utc).isoformat()),
     )
 
 
