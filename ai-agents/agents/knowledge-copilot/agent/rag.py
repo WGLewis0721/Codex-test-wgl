@@ -35,25 +35,28 @@ def ingest_document(data: bytes, filename: str) -> dict[str, int]:
     chunks = chunk_text(text, chunk_size=400, overlap=40)
     collection = _get_collection()
     doc_id = hashlib.sha256(data).hexdigest()[:16]
-    ids, docs, metas = [], [], []
+    ids, docs, metas, embs = [], [], [], []
     for i, chunk in enumerate(chunks):
         chunk_id = f"{doc_id}_{i}"
         emb = embed(chunk)
         ids.append(chunk_id)
         docs.append(chunk)
         metas.append({"filename": filename, "chunk_idx": i, "doc_id": doc_id})
+        embs.append(emb)
     if ids:
-        collection.upsert(ids=ids, documents=docs, metadatas=metas)
+        collection.upsert(ids=ids, documents=docs, metadatas=metas, embeddings=embs)
     return {"doc_id": doc_id, "chunks": len(chunks)}
 
 
 def retrieve(query: str, top_k: int = 5) -> list[dict]:
     """Retrieve top-k relevant chunks for a query."""
     collection = _get_collection()
+    if collection.count() == 0:
+        return []
     q_emb = embed(query)
     results = collection.query(
         query_embeddings=[q_emb],
-        n_results=min(top_k, collection.count() or 1),
+        n_results=min(top_k, collection.count()),
         include=["documents", "metadatas", "distances"],
     )
     items = []
