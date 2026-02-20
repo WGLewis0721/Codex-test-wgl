@@ -168,14 +168,20 @@ variable "log_retention_days" {
   default     = 90
 }
 
+variable "memory_alarm_threshold" {
+  description = "Memory utilization percentage that triggers the high-memory alarm."
+  type        = number
+  default     = 85
+}
+
 variable "cpu_alarm_threshold" {
-  description = "CPU utilisation percentage that triggers the high-CPU alarm."
+  description = "CPU utilization percentage that triggers the high-CPU alarm."
   type        = number
   default     = 80
 }
 
 variable "disk_alarm_threshold" {
-  description = "Disk utilisation percentage that triggers the high-disk alarm."
+  description = "Disk utilization percentage that triggers the high-disk alarm."
   type        = number
   default     = 85
 }

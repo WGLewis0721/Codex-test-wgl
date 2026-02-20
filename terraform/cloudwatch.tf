@@ -46,12 +46,12 @@ locals {
 ###############################################################################
 
 # --------------------------------------------------------------------------
-# High CPU utilisation alarm
+# High CPU utilization alarm
 # Uses the built-in AWS/EC2 CPUUtilization metric (no agent required)
 # --------------------------------------------------------------------------
 resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   alarm_name          = "${var.project_name}-cpu-high"
-  alarm_description   = "EC2 CPU utilisation exceeded ${var.cpu_alarm_threshold}% for 5 consecutive minutes"
+  alarm_description   = "EC2 CPU utilization exceeded ${var.cpu_alarm_threshold}% for 5 consecutive minutes"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 5
   metric_name         = "CPUUtilization"
@@ -74,12 +74,12 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
 }
 
 # --------------------------------------------------------------------------
-# High disk utilisation alarm
+# High disk utilization alarm
 # Requires the CloudWatch agent to publish the CWAgent/disk_used_percent metric
 # --------------------------------------------------------------------------
 resource "aws_cloudwatch_metric_alarm" "disk_high" {
   alarm_name          = "${var.project_name}-disk-high"
-  alarm_description   = "Root disk utilisation exceeded ${var.disk_alarm_threshold}% for 5 consecutive minutes"
+  alarm_description   = "Root disk utilization exceeded ${var.disk_alarm_threshold}% for 5 consecutive minutes"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 5
   metric_name         = "disk_used_percent"
@@ -105,19 +105,19 @@ resource "aws_cloudwatch_metric_alarm" "disk_high" {
 }
 
 # --------------------------------------------------------------------------
-# High memory utilisation alarm
+# High memory utilization alarm
 # Requires the CloudWatch agent to publish the CWAgent/mem_used_percent metric
 # --------------------------------------------------------------------------
 resource "aws_cloudwatch_metric_alarm" "memory_high" {
   alarm_name          = "${var.project_name}-memory-high"
-  alarm_description   = "Memory utilisation exceeded 85% for 5 consecutive minutes"
+  alarm_description   = "Memory utilization exceeded ${var.memory_alarm_threshold}% for 5 consecutive minutes"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 5
   metric_name         = "mem_used_percent"
   namespace           = "CWAgent"
   period              = 60
   statistic           = "Average"
-  threshold           = 85
+  threshold           = var.memory_alarm_threshold
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -183,7 +183,7 @@ resource "aws_cloudwatch_dashboard" "itsm_agent" {
       },
 
       # ------------------------------------------------------------------
-      # CPU Utilisation
+      # CPU Utilization
       # ------------------------------------------------------------------
       {
         type   = "metric"
@@ -192,7 +192,7 @@ resource "aws_cloudwatch_dashboard" "itsm_agent" {
         width  = 8
         height = 6
         properties = {
-          title  = "CPU Utilisation (%)"
+          title  = "CPU Utilization (%)"
           view   = "timeSeries"
           region = var.aws_region
           metrics = [
@@ -208,7 +208,7 @@ resource "aws_cloudwatch_dashboard" "itsm_agent" {
       },
 
       # ------------------------------------------------------------------
-      # Memory Utilisation (requires CWAgent)
+      # Memory Utilization (requires CWAgent)
       # ------------------------------------------------------------------
       {
         type   = "metric"
@@ -217,7 +217,7 @@ resource "aws_cloudwatch_dashboard" "itsm_agent" {
         width  = 8
         height = 6
         properties = {
-          title  = "Memory Utilisation (%)"
+          title  = "Memory Utilization (%)"
           view   = "timeSeries"
           region = var.aws_region
           metrics = [
@@ -227,13 +227,13 @@ resource "aws_cloudwatch_dashboard" "itsm_agent" {
           ]
           yAxis = { left = { min = 0, max = 100 } }
           annotations = {
-            horizontal = [{ value = 85, label = "Alarm threshold", color = "#d62728" }]
+            horizontal = [{ value = var.memory_alarm_threshold, label = "Alarm threshold", color = "#d62728" }]
           }
         }
       },
 
       # ------------------------------------------------------------------
-      # Disk Utilisation (requires CWAgent)
+      # Disk Utilization (requires CWAgent)
       # ------------------------------------------------------------------
       {
         type   = "metric"
@@ -242,7 +242,7 @@ resource "aws_cloudwatch_dashboard" "itsm_agent" {
         width  = 8
         height = 6
         properties = {
-          title  = "Disk Utilisation – / (%)"
+          title  = "Disk Utilization – / (%)"
           view   = "timeSeries"
           region = var.aws_region
           metrics = [

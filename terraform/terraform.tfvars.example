@@ -60,9 +60,10 @@ s3_lifecycle_expiry_days  = 730
 # ---------------------------------------------------------------------------
 # CloudWatch
 # ---------------------------------------------------------------------------
-log_retention_days  = 90
-cpu_alarm_threshold = 80
-disk_alarm_threshold = 85
+log_retention_days      = 90
+cpu_alarm_threshold     = 80
+memory_alarm_threshold  = 85
+disk_alarm_threshold    = 85
 
 # Optional: ARN of an existing SNS topic for alarm notifications
 # alarm_sns_arn = "arn:aws:sns:us-east-1:123456789012:my-alerts-topic"
