@@ -1,3 +1,27 @@
+# Secrets & local config
+.env
+
+# Terraform state and local overrides
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+!*.tfvars.example
+
 # Python
 __pycache__/
 *.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# Local data directories
+chroma_data/
+ollama_data/
+
+# Logs
+*.log
+
+# Test caches
+.pytest_cache/

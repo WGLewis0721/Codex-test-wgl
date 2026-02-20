@@ -115,7 +115,7 @@ variable "data_volume_size_gb" {
 variable "ollama_model" {
   description = "Default Ollama model to pull during bootstrap (e.g. llama3, mistral)."
   type        = string
-  default     = "llama3"
+  default     = "llama3.2:3b"
 }
 
 variable "openwebui_port" {
