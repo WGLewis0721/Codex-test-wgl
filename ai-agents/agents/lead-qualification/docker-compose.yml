@@ -1,0 +1,28 @@
+services:
+  lead-qualification-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8003:8003"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SQLITE_DIR: /app/data
+    volumes:
+      - lead_qualification_data:/app/data
+    restart: unless-stopped
+
+  lead-qualification-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8503:8503"
+    environment:
+      API_URL: http://lead-qualification-api:8003
+    depends_on:
+      - lead-qualification-api
+    restart: unless-stopped
+
+volumes:
+  lead_qualification_data:
