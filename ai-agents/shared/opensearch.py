@@ -53,5 +53,6 @@ def summarize_events(events: list[dict[str, Any]]) -> str:
     """Convert OpenSearch events to a text summary for LLM context."""
     if not events:
         return ""
-    lines = [f"- {e}" for e in events[:10]]
+    import json as _json
+    lines = [f"- {_json.dumps(e)}" for e in events[:10]]
     return "Recent system events:\n" + "\n".join(lines)

@@ -27,7 +27,7 @@ with tab1:
         models = resp.json().get("data", [])
         if models:
             for model in models:
-                st.badge(model["id"])
+                st.write(f"✅ `{model['id']}`")
         else:
             st.info("No models currently available in Ollama")
     except Exception as e:

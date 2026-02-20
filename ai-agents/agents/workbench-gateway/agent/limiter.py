@@ -10,7 +10,8 @@ from shared.config import get_settings
 
 _settings = get_settings()
 _lock = Lock()
-# NOTE: This in-memory store is per-process. Use Redis for multi-worker deployments.
+# NOTE: This in-memory store is per-process and grows with unique client IDs.
+# For long-running deployments, consider periodic cleanup or use Redis.
 _request_times: dict[str, deque] = defaultdict(deque)
 
 

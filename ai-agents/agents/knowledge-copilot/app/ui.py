@@ -29,7 +29,7 @@ with tab1:
                 if data["sources"]:
                     st.subheader("Sources")
                     for src in data["sources"]:
-                        st.badge(src)
+                        st.write(f"📄 `{src}`")
             except Exception as e:
                 st.error(f"Error: {e}")
 

@@ -5,7 +5,7 @@ import re
 from typing import Any
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../.."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../.."))
 from shared.ollama import chat
 from shared.logging import get_logger
 from .prompts import TRIAGE_SYSTEM, TRIAGE_PROMPT

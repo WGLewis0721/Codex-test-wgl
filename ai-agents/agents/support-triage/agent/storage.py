@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from typing import Any
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../.."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../.."))
 from shared.storage import get_db_path, execute, paginate, fetchall
 
 DB_NAME = "support_triage"
