@@ -126,8 +126,6 @@ def _get_or_create_session(session_id: str) -> deque[dict[str, str]]:
 
 
 
-
-
 @router.post("/chat", response_model=ChatResponse, summary="RAG chat with ITSM agent")
 async def chat(req: ChatRequest) -> ChatResponse:
     """Handle a user message with retrieval-augmented generation.
