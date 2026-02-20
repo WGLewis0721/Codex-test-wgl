@@ -1,0 +1,26 @@
+# Terraform state and sensitive variable files – never commit these
+terraform.tfvars
+*.tfvars
+!terraform.tfvars.example
+
+# Terraform working directory
+.terraform/
+.terraform.lock.hcl
+
+# Compiled plan files
+*.tfplan
+*.tfplan.json
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Override files (local developer overrides)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration
+.terraformrc
+terraform.rc
