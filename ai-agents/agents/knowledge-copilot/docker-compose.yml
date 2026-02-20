@@ -1,0 +1,28 @@
+services:
+  knowledge-copilot-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8002:8002"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SQLITE_DIR: /app/data
+    volumes:
+      - knowledge_copilot_data:/app/data
+    restart: unless-stopped
+
+  knowledge-copilot-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8502:8502"
+    environment:
+      API_URL: http://knowledge-copilot-api:8002
+    depends_on:
+      - knowledge-copilot-api
+    restart: unless-stopped
+
+volumes:
+  knowledge_copilot_data:

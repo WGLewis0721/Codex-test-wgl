@@ -1,0 +1,28 @@
+services:
+  interview-fit-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8005:8005"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SQLITE_DIR: /app/data
+    volumes:
+      - interview_fit_data:/app/data
+    restart: unless-stopped
+
+  interview-fit-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8505:8505"
+    environment:
+      API_URL: http://interview-fit-api:8005
+    depends_on:
+      - interview-fit-api
+    restart: unless-stopped
+
+volumes:
+  interview_fit_data:

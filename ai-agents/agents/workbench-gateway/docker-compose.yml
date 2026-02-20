@@ -1,0 +1,28 @@
+services:
+  workbench-gateway-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8006:8006"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SQLITE_DIR: /app/data
+    volumes:
+      - workbench_gateway_data:/app/data
+    restart: unless-stopped
+
+  workbench-gateway-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8506:8506"
+    environment:
+      API_URL: http://workbench-gateway-api:8006
+    depends_on:
+      - workbench-gateway-api
+    restart: unless-stopped
+
+volumes:
+  workbench_gateway_data:

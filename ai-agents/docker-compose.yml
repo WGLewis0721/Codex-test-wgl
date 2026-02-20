@@ -1,0 +1,197 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  support-triage-api:
+    build:
+      context: ./agents/support-triage
+      dockerfile: Dockerfile.api
+    ports:
+      - "8001:8001"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SQLITE_DIR: /app/data
+    volumes:
+      - support_triage_data:/app/data
+      - ./shared:/app/shared
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+
+  support-triage-ui:
+    build:
+      context: ./agents/support-triage
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8501:8501"
+    environment:
+      API_URL: http://support-triage-api:8001
+    depends_on:
+      - support-triage-api
+    restart: unless-stopped
+
+  knowledge-copilot-api:
+    build:
+      context: ./agents/knowledge-copilot
+      dockerfile: Dockerfile.api
+    ports:
+      - "8002:8002"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SQLITE_DIR: /app/data
+    volumes:
+      - knowledge_copilot_data:/app/data
+      - ./shared:/app/shared
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+
+  knowledge-copilot-ui:
+    build:
+      context: ./agents/knowledge-copilot
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8502:8502"
+    environment:
+      API_URL: http://knowledge-copilot-api:8002
+    depends_on:
+      - knowledge-copilot-api
+    restart: unless-stopped
+
+  lead-qualification-api:
+    build:
+      context: ./agents/lead-qualification
+      dockerfile: Dockerfile.api
+    ports:
+      - "8003:8003"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SQLITE_DIR: /app/data
+    volumes:
+      - lead_qualification_data:/app/data
+      - ./shared:/app/shared
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+
+  lead-qualification-ui:
+    build:
+      context: ./agents/lead-qualification
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8503:8503"
+    environment:
+      API_URL: http://lead-qualification-api:8003
+    depends_on:
+      - lead-qualification-api
+    restart: unless-stopped
+
+  customer-profile-api:
+    build:
+      context: ./agents/customer-profile
+      dockerfile: Dockerfile.api
+    ports:
+      - "8004:8004"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SQLITE_DIR: /app/data
+    volumes:
+      - customer_profile_data:/app/data
+      - ./shared:/app/shared
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+
+  customer-profile-ui:
+    build:
+      context: ./agents/customer-profile
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8504:8504"
+    environment:
+      API_URL: http://customer-profile-api:8004
+    depends_on:
+      - customer-profile-api
+    restart: unless-stopped
+
+  interview-fit-api:
+    build:
+      context: ./agents/interview-fit
+      dockerfile: Dockerfile.api
+    ports:
+      - "8005:8005"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SQLITE_DIR: /app/data
+    volumes:
+      - interview_fit_data:/app/data
+      - ./shared:/app/shared
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+
+  interview-fit-ui:
+    build:
+      context: ./agents/interview-fit
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8505:8505"
+    environment:
+      API_URL: http://interview-fit-api:8005
+    depends_on:
+      - interview-fit-api
+    restart: unless-stopped
+
+  workbench-gateway-api:
+    build:
+      context: ./agents/workbench-gateway
+      dockerfile: Dockerfile.api
+    ports:
+      - "8006:8006"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SQLITE_DIR: /app/data
+    volumes:
+      - workbench_gateway_data:/app/data
+      - ./shared:/app/shared
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+
+  workbench-gateway-ui:
+    build:
+      context: ./agents/workbench-gateway
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8506:8506"
+    environment:
+      API_URL: http://workbench-gateway-api:8006
+    depends_on:
+      - workbench-gateway-api
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
+  support_triage_data:
+  knowledge_copilot_data:
+  lead_qualification_data:
+  customer_profile_data:
+  interview_fit_data:
+  workbench_gateway_data:

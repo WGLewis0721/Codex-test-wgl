@@ -1,0 +1,28 @@
+services:
+  customer-profile-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8004:8004"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SQLITE_DIR: /app/data
+    volumes:
+      - customer_profile_data:/app/data
+    restart: unless-stopped
+
+  customer-profile-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8504:8504"
+    environment:
+      API_URL: http://customer-profile-api:8004
+    depends_on:
+      - customer-profile-api
+    restart: unless-stopped
+
+volumes:
+  customer_profile_data:
