@@ -66,6 +66,7 @@ def handle_chat_completion(request: dict[str, Any]) -> dict[str, Any]:
             "finish_reason": "stop",
         }],
         "usage": {
+            # Token counts are word-split approximations, not exact tokenizer counts.
             "prompt_tokens": len(prompt.split()),
             "completion_tokens": len(response_text.split()),
             "total_tokens": len(prompt.split()) + len(response_text.split()),

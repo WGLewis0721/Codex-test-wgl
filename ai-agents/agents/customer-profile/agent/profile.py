@@ -13,15 +13,6 @@ from .prompts import PROFILE_SYSTEM, PROFILE_PROMPT
 logger = get_logger(__name__)
 
 
-class CustomerProfile:
-    """Structured customer profile schema."""
-    summary: str
-    recommended_services: list[str]
-    risk_factors: list[str]
-    migration_complexity: str
-    priority_actions: list[str]
-
-
 def build_profile(form_data: dict[str, Any]) -> dict[str, Any]:
     """Build structured customer profile from form data using LLM."""
     prompt = PROFILE_PROMPT.format(

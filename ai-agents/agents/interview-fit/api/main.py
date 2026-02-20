@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../.."))
+from datetime import datetime, timezone
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from pydantic import BaseModel
 from shared.schemas import HealthResponse
@@ -40,7 +41,6 @@ async def analyze(
     result = analyze_fit(resume_text, jd_text)
     jd_summary = jd_text[:80]
     markdown = build_markdown_report(result, jd_summary)
-    from datetime import datetime, timezone
     ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     export_path = save_export(markdown, f"fit_analysis_{ts}.md")
     save_analysis(result["fit_grade"], jd_summary, export_path)
